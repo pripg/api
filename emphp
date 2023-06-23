@@ -1,0 +1,33 @@
+<?php
+// Biblioteca para fazer requisições HTTP
+require_once('vendor/autoload.php');
+
+use Abraham\TwitterOAuth\TwitterOAuth;
+
+// Defina suas chaves de autenticação fornecidas pelo Twitter Developer Portal
+$consumerKey = 'YOUR_CONSUMER_KEY';
+$consumerSecret = 'YOUR_CONSUMER_SECRET';
+$accessToken = 'YOUR_ACCESS_TOKEN';
+$accessTokenSecret = 'YOUR_ACCESS_TOKEN_SECRET';
+
+// Crie uma instância da classe TwitterOAuth com as chaves de autenticação
+$connection = new TwitterOAuth($consumerKey, $consumerSecret, $accessToken, $accessTokenSecret);
+
+// Faça uma requisição para a API do Twitter
+$tweets = $connection->get('statuses/user_timeline', [
+  'screen_name' => 'twitterapi',
+  'count' => 5
+]);
+
+// Verifique se a requisição foi bem-sucedida
+if ($connection->getLastHttpCode() == 200) {
+  // Itere sobre os tweets retornados
+  foreach ($tweets as $tweet) {
+    // Exiba o texto do tweet
+    echo $tweet->text . "\n";
+  }
+} else {
+  // Exiba a mensagem de erro
+  echo "Erro na requisição: " . $connection->getLastHttpCode() . "\n";
+}
+?>
