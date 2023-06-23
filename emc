@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <curl/curl.h>
+
+// Função para fazer a requisição GET à API do Twitter
+void makeRequest() {
+  CURL *curl;
+  CURLcode res;
+
+  curl_global_init(CURL_GLOBAL_DEFAULT);
+  curl = curl_easy_init();
+
+  if (curl) {
+    // Defina a URL da API do Twitter e configure as chaves de autenticação
+    const char *url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=twitterapi&count=5";
+    const char *consumer_key = "YOUR_CONSUMER_KEY";
+    const char *consumer_secret = "YOUR_CONSUMER_SECRET";
+    const char *access_token = "YOUR_ACCESS_TOKEN";
+    const char *access_token_secret = "YOUR_ACCESS_TOKEN_SECRET";
+
+    // Configure as opções de autenticação
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, NULL);
+    curl_easy_setopt(curl, CURLOPT_POST, 0);
+    curl_easy_setopt(curl, CURLOPT_USERPWD, "user:password");
+
+    // Faça a requisição GET
+    res = curl_easy_perform(curl);
+
+    // Verifique se a requisição foi bem-sucedida
+    if (res != CURLE_OK) {
+      fprintf(stderr, "Falha na requisição: %s\n", curl_easy_strerror(res));
+    }
+
+    // Libere os recursos
+    curl_easy_cleanup(curl);
+  }
+
+  curl_global_cleanup();
+}
+
+int main() {
+  // Faça a requisição à API do Twitter
+  makeRequest();
+
+  return 0;
+}
